@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Posts{% endblock %}
+{% block content %}
+    <h2>POSTS</h2>
+    {% for post in posts %}
+    <div class="card">
+    {{ post.title }}
+        <a class="card-body" href="{% url 'crud:detail' post.id post.slug %}">{{ post.body|truncatewords:4 }}</a>
+    </div>
+    {% empty %}
+    <p class="danger">you dont have any post</p>
+    {% endfor %}
+{% endblock %}

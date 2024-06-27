@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
+from crud.models import Post
 
 
 class RegisterView(View):
@@ -64,3 +65,13 @@ class UserLogoutView(LoginRequiredMixin, View):
         logout(request)
         messages.success(request, 'You are now logged out', 'success')
         return redirect('home:home')
+
+
+class ProfileView(LoginRequiredMixin, View):
+    def get(self, request, user_id):
+        user = User.objects.get(pk=user_id)
+        posts = Post.objects.filter(user=user)
+        return render(request, 'account/profile.html', {'user': user, 'posts': posts})
+
+    def post(self, request, user_id):
+        pass
