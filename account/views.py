@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from .forms import RegisterForm, LoginForm
 from django.contrib.auth.models import User
@@ -6,6 +6,8 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from crud.models import Post
+from django.contrib.auth import views as auth_views
+from django.urls import reverse_lazy
 
 
 class RegisterView(View):
@@ -69,9 +71,25 @@ class UserLogoutView(LoginRequiredMixin, View):
 
 class ProfileView(LoginRequiredMixin, View):
     def get(self, request, user_id):
-        user = User.objects.get(pk=user_id)
+        user = get_object_or_404(User, pk=user_id)
         posts = Post.objects.filter(user=user)
         return render(request, 'account/profile.html', {'user': user, 'posts': posts})
 
-    def post(self, request, user_id):
-        pass
+
+class UserPasswordResetView(auth_views.PasswordResetView):
+    template_name = 'account/reset_password.html'
+    success_url = reverse_lazy('account:reset_password_done')
+    email_template_name = 'account/email_reset_password.html'
+
+
+class UserPasswordResetDoneView(auth_views.PasswordResetDoneView):
+    template_name = 'account/reset_password_done.html'
+
+
+class UserPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
+    template_name = 'account/reset_password_confirm.html'
+    success_url = reverse_lazy('account:reset_password_complete')
+
+
+class UserPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
+    template_name = 'account/reset_password_complete.html'

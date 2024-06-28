@@ -4,9 +4,13 @@
     <div>
     <h2>{{ post.title }}</h2>
     <br>
+        {% if post.user.id == request.user.id %}
+            <a href="{% url 'crud:delete' post.id %}" class="btn btn-danger">Delete</a>
+            <a href="{% url 'crud:update' post.id %}" class="btn btn-info">Update</a>
+        {% endif %}
     <p>{{ post.body }}</p>
     <small>{{ post.created }}</small>
     <br>
-    <small>{{ post.user }}</small>
+    <a href="{% url 'account:profile' post.user.id %}">{{ post.user }}</a>
     </div>
 {% endblock %}

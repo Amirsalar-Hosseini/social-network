@@ -2,8 +2,12 @@
 {% block title %}Profile{% endblock %}
 {% block content %}
     <h2 class="text-center">{{ user.username }}</h2>
+    {% if request.user.id == user.id %}
+        <a href="{% url 'crud:create' %}" class="btn btn-primary">Create</a>
+    {% endif %}
+    <hr>
     {% for post in posts %}
-    <a href="{% url 'crud:detail' post.id post.slug %}">{{ post.title }}</a><br>
+    <a href="{{ post.get_absolute_url }}">{{ post.title }}</a><br>
     {% empty %}
     <p class="danger">empty!, go create and come again</p>
     {% endfor %}
