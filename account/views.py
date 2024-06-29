@@ -58,7 +58,7 @@ class UserLoginView(View):
                 messages.success(request, 'You are now logged in', 'success')
                 return redirect('home:home')
             else:
-                messages.error(request, 'Invalid username or password', 'error')
+                messages.warning(request, 'Invalid username or password', 'warning')
         return render(request, self.template_name, {'form': form})
 
 
@@ -77,19 +77,19 @@ class ProfileView(LoginRequiredMixin, View):
 
 
 class UserPasswordResetView(auth_views.PasswordResetView):
-    template_name = 'account/reset_password.html'
-    success_url = reverse_lazy('account:reset_password_done')
-    email_template_name = 'account/email_reset_password.html'
+    template_name = 'account/password_reset_form.html'
+    success_url = reverse_lazy('account:password_reset_done')
+    email_template_name = 'account/password_reset_email.html'
 
 
 class UserPasswordResetDoneView(auth_views.PasswordResetDoneView):
-    template_name = 'account/reset_password_done.html'
+    template_name = 'account/password_reset_done.html'
 
 
 class UserPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
-    template_name = 'account/reset_password_confirm.html'
-    success_url = reverse_lazy('account:reset_password_complete')
+    template_name = 'account/password_reset_confirm.html'
+    success_url = reverse_lazy('account:password_reset_complete')
 
 
 class UserPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
-    template_name = 'account/reset_password_complete.html'
+    template_name = 'account/password_reset_complete.html'
