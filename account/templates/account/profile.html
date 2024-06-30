@@ -4,6 +4,7 @@
     <h2 class="text-center">{{ user.username }}</h2>
     {% if request.user.id == user.id %}
         <a href="{% url 'crud:create' %}" class="btn btn-primary">Create</a>
+        <a href="{% url 'account:edit_profile' %}" class="btn btn-info">Edit Profile</a>
     {% endif %}
     
     {% if request.user.id != user.id and not is_following %}

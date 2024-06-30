@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 {% block title %}Posts{% endblock %}
 {% block content %}
+    <form action="" method="get">
+    {{ form.as_p }}
+    <input type="submit" value="Search">
+    </form>
+    <br>
     <h2>POSTS</h2>
     {% for post in posts %}
     <div class="card">
@@ -8,6 +13,6 @@
         <a class="card-body" href="{{ post.get_absolute_url }}">{{ post.body|truncatewords:4 }}</a>
     </div>
     {% empty %}
-    <p class="danger">you dont have any post</p>
+    <p class="danger">we don't have any post</p>
     {% endfor %}
 {% endblock %}

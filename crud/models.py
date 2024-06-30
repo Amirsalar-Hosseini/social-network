@@ -20,6 +20,16 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('crud:detail', args=(self.id, self.slug))
 
+    def vote_count(self):
+        return self.post_votes.count()
+
+    def is_vote(self, user):
+        user_vote = user.user_votes.filter(post=self)
+        if user_vote.exists():
+            return True
+        return False
+
+
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_comments')
@@ -31,3 +41,11 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'{self.user} - {self.post.title} - {self.body[:30]}'
+
+
+class Vote(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_votes')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post_votes')
+
+    def __str__(self):
+        return f'{self.user} vote {self.post.title}'

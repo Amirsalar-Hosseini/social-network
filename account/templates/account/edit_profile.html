@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}Edit Profile {{ form.user.username }}{% endblock %}
+{% block content %}
+    <form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+        <input type="submit" value="Edit">
+    </form>
+{% endblock %}

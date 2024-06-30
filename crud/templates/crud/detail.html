@@ -13,4 +13,36 @@
     <br>
     <a href="{% url 'account:profile' post.user.id %}">{{ post.user }}</a>
     </div>
+    <hr>
+    {% if request.user.is_authenticated %}
+        <a href="{% url 'crud:vote' post.id %}" class="{% if not can_vote %}disabled{% endif %} btn btn-primary col-md-1">{{ post.vote_count }} Like</a>
+        <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+            <input type="submit" value="send">
+        </form>
+    {% else %}
+        <p class="alert alert-danger">only logged-in users can comment</p>
+    {% endif %}
+    <p>{{ comments.count }} comments</p>
+    {% for comment in comments %}
+    <div class="card bg-dark text-white">
+    <p class="card-header">{{ comment.user }} | {{ comment.created|timesince }} ago</p>
+    <p class="card-body">{{ comment.body }}</p>
+        {% if request.user.is_authenticated %}
+            <form action="{% url 'crud:reply' post.id comment.id %}" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+                <input type="submit" value="reply">
+            </form>
+    {% endif %}
+    {% with replies=comment.reply_comments.all %}
+        {% for reply in replies %}
+            <p class="bg-primary p-3 m-2">{{ reply.user }} reply to {{ comment.user }}<br>{{ reply.body }}</p>
+        {% endfor %}
+        {% endwith %}
+    {% empty %}
+    <p class="card-header">No comment</p>
+    </div>
+    {% endfor %}
 {% endblock %}
