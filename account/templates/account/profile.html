@@ -5,6 +5,12 @@
     {% if request.user.id == user.id %}
         <a href="{% url 'crud:create' %}" class="btn btn-primary">Create</a>
     {% endif %}
+    
+    {% if request.user.id != user.id and not is_following %}
+        <a href="{% url 'account:follow' user.id %}" class="btn btn-primary">Follow</a>
+        {% elif request.user.id != user.id and is_following %}
+        <a href="{% url 'account:unfollow' user.id %}" class="btn btn-primary">Unfollow</a>
+    {% endif %}
     <hr>
     {% for post in posts %}
     <a href="{{ post.get_absolute_url }}">{{ post.title }}</a><br>
